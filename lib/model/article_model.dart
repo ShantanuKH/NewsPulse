@@ -1,4 +1,4 @@
-class SliderModel {
+class ArticleModel {
   String? author;
   String? title;
   String? description;
@@ -6,7 +6,7 @@ class SliderModel {
   String? urlToImage;
   String? content;
 
-  SliderModel(
+  ArticleModel(
       {
       this.author,
       this.title,
@@ -14,6 +14,4 @@ class SliderModel {
       this.url,
       this.urlToImage,
       this.content});
-
-  getSlider() {}
 }

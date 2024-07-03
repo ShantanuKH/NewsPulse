@@ -1,13 +1,14 @@
 import 'dart:convert';
+
+import 'package:news_pulse/model/article_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:news_pulse/model/slider_model.dart';
 
-class Sliders {
-  List<SliderModel> sliders = [];
+class News {
+  List<ArticleModel> news = [];
 
-  Future<void> getSlider() async {
+  Future<void> getNews() async {
     String url =
-        "https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=7e17ed669af54c90a2a950d001baa63e";
+        "https://newsapi.org/v2/everything?q=tesla&from=2024-06-03&sortBy=publishedAt&apiKey=7e17ed669af54c90a2a950d001baa63e";
     var response = await http.get(Uri.parse(url));
 
     // Here we are decoding the data that we are getting from the NesApi
@@ -16,7 +17,7 @@ class Sliders {
     if (jsonData['status'] == 'ok') {
       jsonData["articles"].forEach((element) {
         if (element["urlToImage"] != null && element['description'] != null) {
-          SliderModel sliderModel = SliderModel(
+          ArticleModel articleModel = ArticleModel(
             author: element["author"],
             title: element["title"],
             description: element["description"],
@@ -24,7 +25,7 @@ class Sliders {
             urlToImage: element["urlToImage"],
             content: element["content"],
           );
-          sliders.add(sliderModel);
+          news.add(articleModel);
         }
       });
     }
