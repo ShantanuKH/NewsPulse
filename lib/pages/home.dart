@@ -7,7 +7,9 @@ import 'package:flutter/widgets.dart';
 import 'package:news_pulse/model/article_model.dart';
 import 'package:news_pulse/model/category_model.dart';
 import 'package:news_pulse/model/slider_model.dart';
+import 'package:news_pulse/pages/allNews.dart';
 import 'package:news_pulse/pages/article_view.dart';
+import 'package:news_pulse/pages/category_news.dart';
 import 'package:news_pulse/services/data.dart';
 import 'package:news_pulse/services/news.dart';
 import 'package:news_pulse/services/slider_data.dart';
@@ -112,12 +114,20 @@ class _HomePageState extends State<HomePage> {
                                 fontWeight: FontWeight.bold,
                                 fontFamily: 'PlaywriteGBS'),
                           ),
-                          Text(
-                            "View All",
-                            style: TextStyle(
-                                color: Colors.redAccent,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600),
+                          GestureDetector(
+                            onTap: (){
+                               Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => AllNews(news: "Breaking")),
+                              );
+                            },
+                            child: Text(
+                              "View All",
+                              style: TextStyle(
+                                  color: Colors.redAccent,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600),
+                            ),
                           ),
                         ],
                       ),
@@ -163,12 +173,20 @@ class _HomePageState extends State<HomePage> {
                                 fontWeight: FontWeight.w500,
                                 fontFamily: 'ZillaSlab'),
                           ),
-                          Text(
-                            "View All",
-                            style: TextStyle(
-                                color: Colors.blueAccent,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600),
+                          GestureDetector(
+                             onTap: (){
+                               Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => AllNews(news: "Trending")),
+                              );
+                            },
+                            child: Text(
+                              "View All",
+                              style: TextStyle(
+                                  color: Colors.blueAccent,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600),
+                            ),
                           ),
                         ],
                       ),
@@ -256,37 +274,45 @@ class CatergoryTiles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(right: 10),
-      child: Stack(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(6)),
-            child: Image.asset(
-              image,
-              width: 120,
-              height: 120,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6),
-              color: Colors.black38,
-            ),
-            width: 120,
-            height: 120,
-            child: Center(
-              child: Text(
-                catergoryName,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CategoryNews(name: catergoryName)));
+      },
+      child: Container(
+        margin: EdgeInsets.only(right: 10),
+        child: Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.all(Radius.circular(6)),
+              child: Image.asset(
+                image,
+                width: 120,
+                height: 120,
+                fit: BoxFit.cover,
               ),
             ),
-          )
-        ],
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6),
+                color: Colors.black38,
+              ),
+              width: 120,
+              height: 120,
+              child: Center(
+                child: Text(
+                  catergoryName,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
