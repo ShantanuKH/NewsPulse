@@ -6,6 +6,7 @@ import 'package:news_pulse/model/category_model.dart';
 import 'package:news_pulse/model/slider_model.dart';
 import 'package:news_pulse/services/data.dart';
 import 'package:news_pulse/services/slider_data.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,6 +24,8 @@ class _HomePageState extends State<HomePage> {
     slider = getSliders();
     super.initState();
   }
+
+  int activeIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +52,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Container(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               margin: EdgeInsets.only(left: 10),
@@ -64,7 +68,37 @@ class _HomePageState extends State<HomePage> {
                     );
                   }),
             ),
-            SizedBox(height: 15,),
+            SizedBox(
+              height: 15,
+            ),
+             Padding(
+              padding: EdgeInsets.only(left: 10,right: 10),
+               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Breaking News !",
+                 style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'PlaywriteGBS'
+                 ),
+                 ),
+                 Text("View All",
+                 style: TextStyle(
+                  color: Colors.redAccent,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600
+                 ),
+                 ),
+                ],
+               ),
+             ),
+              SizedBox(
+              height: 15,
+            ),
+
+
             CarouselSlider.builder(
                 itemCount: slider.length,
                 itemBuilder: (context, index, realIndex) {
@@ -72,12 +106,48 @@ class _HomePageState extends State<HomePage> {
                   String? sname = slider[index].name;
                   return buildImage(res!, index, sname!);
                 },
+               
                 options: CarouselOptions(
                     height: 240,
                     autoPlay: true,
                     autoPlayAnimationDuration: Durations.long4,
                     enlargeCenterPage: true,
-                    enlargeStrategy: CenterPageEnlargeStrategy.zoom)),
+                    enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        activeIndex = index;
+                      });
+                    })),
+            SizedBox(
+              height: 20,
+            ),
+            Center(child: buildIndicator()),
+              SizedBox(
+              height: 20,
+            ),
+                         Padding(
+              padding: EdgeInsets.only(left: 10,right: 10),
+               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Trending News !",
+                 style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'ZillaSlab'
+                 ),
+                 ),
+                 Text("View All",
+                 style: TextStyle(
+                  color: Colors.blueAccent,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600
+                 ),
+                 ),
+                ],
+               ),
+             ),
           ],
         ),
       ),
@@ -88,38 +158,46 @@ class _HomePageState extends State<HomePage> {
         margin: EdgeInsets.symmetric(horizontal: 4),
         child: Stack(
           children: [
-          
-            
-           ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.asset(
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.asset(
+                height: 240,
+                image,
+                fit: BoxFit.cover,
+                width: MediaQuery.of(context).size.width,
+              ),
+            ),
+            Container(
               height: 240,
-              image,
-              fit: BoxFit.cover,
+              padding: EdgeInsets.only(left: 10),
+              margin: EdgeInsets.only(top: 160),
               width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                  color: Colors.black26,
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10))),
+              child: Text(
+                name,
+                style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 20,
+                    color: Colors.white),
+              ),
             ),
-          ),
-          Container(
-            height: 240,
-            padding: EdgeInsets.only(left: 10),
-            margin: EdgeInsets.only(top:130),
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              color: Colors.black26,
-              borderRadius:BorderRadius.only(bottomLeft:Radius.circular(10),bottomRight:Radius.circular(10) )
-              
-            ),
-            child: Text(name,
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 20,
-              color: Colors.white
-            ),
-            ),
-          ),
-
-           ],
+          ],
         ),
+      );
+
+  Widget buildIndicator() => AnimatedSmoothIndicator(
+        activeIndex: activeIndex,
+        count: slider.length,
+        effect: JumpingDotEffect(
+            dotHeight: 8,
+            dotWidth: 8,
+            jumpScale: 2,
+            verticalOffset: 8,
+            activeDotColor: const Color.fromARGB(255, 3, 138, 201)),
       );
 }
 
